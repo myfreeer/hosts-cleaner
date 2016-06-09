@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Create Your Own Code!</title>
+<style type="text/css">
+
+*{margin:0;padding:0}
+body{
+	background:#000;
+}
+#box{
+
+}
+.wrap,
+#code{
+	background:#000;
+	overflow-y:scroll;
+	overflow-x:hidden;
+	height:500px;
+	padding:5px;
+}
+#code{
+	border:0;
+	width:99%;
+	line-height:170%;
+	color:#0f0;
+	font-family: monospace, sans-serif;
+	font-size:12px;
+	padding: 5px;
+}
+#toolbar{
+	width:100%;
+	float:left;
+	background:#000;
+	color:#ffffff;
+}
+#toolbar input{
+	height:24px;
+	line-height:24px;
+	border:0;
+	border-right:1px solid #666;
+	cursor:pointer;
+	font-size:12px;
+	margin:0 1px 0 0;
+	padding:0 5px;
+	float:left;
+}
+</style>
+</head>
+<body>
+
+<div id="box">
+	<textarea id="code"></textarea>
+		
+	<div id="toolbar">
+		<input type="button" id="runbtn" value="Run" />
+		<input type="button" id="cbtn" value="Clear" />
+		<input type="button" id="sbtn" value="Select All" />
+	</div>
+	<div id="text1" style="display:none">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO; // 引用输入输出操作的命令空间
+namespace ReadWriteFile
+{
+    class Program
+    {
+        // 主函数
+        //const string bpm="150";
+        static void Main(string[] args)
+        {
+        	string x="",z="";
+        	int y=0;
+        	try
+        	{
+        		x=Convert.ToString(args[0]);
+        	}
+        	catch{
+        	Console.WriteLine("Error:No input file.");Console.ReadKey();Environment.Exit(-1);}
+        	        	try
+        	{
+        		y=Convert.ToInt32(args[1]);
+        	}
+        	catch{
+Console.WriteLine("Warning:bpm not defined, using 150");y=150;}
+try
+        	{
+        		z=Convert.ToString(args[2]);
+        	}
+        	catch{
+Console.WriteLine("Warning:voice not defined, using New Geping UTAU Database");z="New Geping UTAU Database";}
+            if (args[0]==null){Console.WriteLine("Error:No input file.");Environment.Exit(-1);}
+            Read(args[0],y.ToString(),z); // 读操作
+            //Write(); // 写操作
+        }
+        // 读操作
+        public static void Read(string s,string bpm,string voice)
+        {
+            if (s==null){Console.WriteLine("Error:No input file.");Environment.Exit(-1);}
+            // 读取文件的源路径及其读取流
+            string strReadFilePath = @s;
+            StreamReader srReadFile=new StreamReader((System.IO.Stream)File.OpenRead(strReadFilePath),System.Text.Encoding.GetEncoding("gb2312"));
+            // 读取流直至文件末尾结束
+            while (!srReadFile.EndOfStream)
+            {
+                string strReadLine = srReadFile.ReadLine(); //读取每行数据
+                //int filelength = strReadLine.Length%256>0?strReadLine.Length/256+1:strReadLine.Length/256;
+                int filelength = strReadLine.Length/256;
+                //Console.WriteLine(filelength); 
+                //Console.WriteLine(filelength*256); 
+                //Console.WriteLine(strReadLine.Length); 
+                for (int i=0;i&lt;filelength;i++){
+                	Console.Write("Writing File ");
+                	Console.Write(i+1);
+                	Console.Write(" of ");
+                	Console.Write(filelength);
+                	Console.WriteLine(" ..."); 
+                	string name="numbers_"+i.ToString();
+                	string header="[#SETTING]\r\nUstVersion=1.19\r\nTempo="+bpm+"\r\nTracks=1\r\nProjectName="+name+"\r\nVoiceDir=%VOICE%"+voice+"\r\nOutFile="+name+".wav\r\nCacheDir="+name+".cache\r\nTool1=wavtool.exe\r\nTool2=resampler.exe\r\nMode2=True\r\n";
+                	string fname=name+".ust";
+                	string ender="[#TRACKEND]";
+                	Write(header,fname);
+                	//Console.WriteLine(strReadLine.Substring(i*256,256));
+                	Count(strReadLine.Substring(i*256,256),i);
+                	//Console.WriteLine(i);
+                	//Console.WriteLine(i*256); 
+                	Write(ender,fname);
+                	Write(strReadLine.Substring(i*256,256),name+"_data.txt");
+                }
+            //Console.WriteLine(strReadLine); //屏幕打印每行数据
+
+            }
+            // 关闭读取流文件
+            srReadFile.Close();
+            Console.WriteLine("Done!\nPress Any Key To Exit."); 
+            Console.ReadKey();
+        }
+        public static void Count(string str,int times)
+        {
+        	if (str.Length!=256) return;
+        	for (int i=0;i&lt;256;i++){
+        		/*
+        		Console.Write("ptimes=");
+        		Console.Write(i+1);
+        		Console.Write("；times=");
+        		Console.Write(times*256+i+1);
+        		Console.Write("；data=");
+        		Console.Write(str.Substring(i,1));
+        		Console.Write("\r\n");
+        		*/
+        		Convt1(str.Substring(i,1),times,i);
+        	}
+        }
+        public static void Convt1(string str,int times,int ptimes)
+        {
+        	switch (str)
+        	{
+         	   case "1":
+          	      //Console.WriteLine("Case 1");
+          	      Convt2("yi",times,ptimes);
+          	      break;
+          	  case "2":
+               	 //Console.WriteLine("Case 2");
+          	      Convt2("er",times,ptimes);
+           	     break;
+          	  case "3":
+          	      //Console.WriteLine("Case 3");
+          	      Convt2("san",times,ptimes);
+          	      break;
+          	  case "4":
+          	      //Console.WriteLine("Case 4");
+          	      Convt2("si",times,ptimes);
+           	     break;
+          	  case "5":
+           	     //Console.WriteLine("Case 5");
+          	      Convt2("wu",times,ptimes);
+           	     break;
+          	  case "6":
+          	      //Console.WriteLine("Case 6");
+          	      Convt2("liu",times,ptimes);
+           	     break;
+           	 case "7":
+           	     //Console.WriteLine("Case 7");
+          	      Convt2("qi",times,ptimes);
+           	     break;
+        	   case "8":
+           	     //Console.WriteLine("Case 8");
+          	      Convt2("ba",times,ptimes);
+           	     break;
+          	  case "9":
+           	    // Console.WriteLine("Case 9");
+          	      Convt2("jiu",times,ptimes);
+           	     break;
+         	   case "0":
+           	    // Console.WriteLine("Case 0");
+          	      Convt2("ling",times,ptimes);
+         	       break;
+         	   case ".":
+         	      // Console.WriteLine("Case .");
+          	      Convt2("dian",times,ptimes);
+        	        break;
+          	  default:
+         	       Console.WriteLine("ERROR: Only Numbers and \".\" are allowed.");
+         	       Console.WriteLine(times);
+         	       Console.WriteLine(ptimes);
+         	       Console.WriteLine(str);
+         	  Console.ReadKey();
+         	       break;
+        	}
+        }
+        public static void Convt2(string py,int times,int ptimes)
+        {
+        	string name="numbers_"+times.ToString();
+        	string fname=name+".ust";
+        	string data="";
+        	switch (ptimes)
+        	{</div>
+	<div id="text2" style="display:none"></div>
+	<div id="text3" style="display:none">";
+break;
+          	  default:
+         	       Console.WriteLine("ERROR: Function Convt2 is broken.");
+         	       Console.WriteLine(py);
+         	       Console.WriteLine(ptimes);
+         	       Console.WriteLine(times);
+         	  Console.ReadKey();
+         	       break;
+        	}
+        	Write(data,fname);
+        }
+        // 写操作
+        public static void Write(string data,string file)
+        {
+        	try{
+        	using (System.IO.StreamWriter filew = 
+            new System.IO.StreamWriter(@file, true))
+        {
+            filew.WriteLine(data);
+        }
+    }
+    catch{
+    	Console.WriteLine("ERROR:Cannot write file" + file);
+    }
+        }
+    }
+}
+</div>
+</div>
+
+<script type="text/javascript">
+var elm = function(e){
+	return document.getElementById(e);
+};
+//var viewportWidth = window.innerWidth - 50; // -50 only want to show beacutiful >3
+//var viewportHeight = window.innerHeight - 90;
+//elm('code').height=viewportHeight;
+//elm('code').width=viewportWidth;
+elm('code').value="//Paste Your ust Here And Click Run to Create Your Own Code";
+elm('cbtn').onclick = function(){elm('code').value="";};
+elm('sbtn').onclick = function(){elm('code').select();};
+elm('runbtn').onclick = function(){
+	elm('code').value=elm('code').value.replace(/\[\#TRACKEND\]/g, "");
+	elm('code').value=elm('code').value.replace(/\[\#SETTING\]/g, "");
+	elm('code').value=elm('code').value.replace(/UstVersion=.+/g, "");
+	elm('code').value=elm('code').value.replace(/Tempo=.+/g, "");
+	elm('code').value=elm('code').value.replace(/Tracks=.+/g, "");
+	elm('code').value=elm('code').value.replace(/ProjectName=.+/g, "");
+	elm('code').value=elm('code').value.replace(/VoiceDir=.+/g, "");
+	elm('code').value=elm('code').value.replace(/OutFile=.+/g, "");
+	elm('code').value=elm('code').value.replace(/CacheDir=.+/g, "");
+	elm('code').value=elm('code').value.replace(/Tool1=.+/g, "");
+	elm('code').value=elm('code').value.replace(/Tool2=.+/g, "");
+	elm('code').value=elm('code').value.replace(/Mode2=.+/g, "");
+	elm('code').value=elm('code').value.replace(/Lyric=.+/g, "Lyric=\"+py+\"");
+	elm('code').value=elm('code').value.replace(/\[\#(0{1,3})([0-9]{1,3})\]/g, "\";换行符break;换行符case $2:换行符data=\"\[\#$1$2\]");
+	elm('code').value=elm('code').value.replace(/\n/g, "\\r\\n");
+	elm('code').value=elm('code').value.replace(/换行符/g, "\n");
+	elm('code').value=elm('code').value.replace(/[\\rn]+\"\;break\;/g, "\n");
+	elm('code').value=elm('code').value.substring(elm('code').value.indexOf("case 0:"));
+	
+	elm('code').value=elm('text1').innerText+"\n"+elm('code').value;
+	elm('code').value+=elm('text3').innerText;
+	elm('code').value+="\n//Process Done!";
+	alert('Process Done!');
+	elm('code').scrollTop = elm('code').scrollHeight;
+};
+</script>
+</body>
+</html>
