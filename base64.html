@@ -221,7 +221,7 @@ var elm = function(e){
 };
 elm('clear').onclick = function(){elm('code').value="";};
 elm('enc').onclick = function(){elm('code').value+="\n\nBase64 Encoded Data:\n" + Base64.encode(elm('code').value);};
-elm('enc').onclick = function(){elm('code').value+="\n\nBase64 Decoded Data:\n" + Base64.decode(elm('code').value);};
+elm('dec').onclick = function(){elm('code').value+="\n\nBase64 Decoded Data:\n" + Base64.decode(elm('code').value);};
 elm('encd').onclick = function(){
 	elm('code').value+="\n\ndata:text/html;charset=utf-8;base64," + Base64.encode(elm('code').value);
 	elm('code').scrollTop = elm('code').scrollHeight;
