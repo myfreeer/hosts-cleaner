@@ -224,7 +224,8 @@ if (herf.innerText.indexOf(&apos;:&apos;)&gt; 0) window.location=herf.innerText;
 var elm = function(e){
 	return document.getElementById(e);
 };
-elm('clear').onclick = function(){elm('code').value="";};
+var orininalValue=elm('code').value;
+elm('clear').onclick = function(){elm('code').value=orininalValue;};
 elm('enc').onclick = function(){elm('code').value+="\n\nBase64 Encoded Data:\n" + Base64.encode(elm('code').value);};
 elm('dec').onclick = function(){elm('code').value+="\n\nBase64 Decoded Data:\n" + Base64.decode(elm('code').value);};
 elm('encd').onclick = function(){
