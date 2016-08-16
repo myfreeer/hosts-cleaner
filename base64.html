@@ -197,16 +197,22 @@ body{
 &lt;head&gt;
 &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
 &lt;title&gt;&lt;/title&gt;
+&lt;div id=&quot;redirect&quot; style=&quot;display:none !important&quot;&gt;&lt;!--将需要重定向到的链接放在这一行下面，若无内容，将不重定向--&gt;
+
+&lt;/div&gt;
 &lt;/head&gt;
 &lt;body&gt;
+&lt;div id=&quot;content&quot;&gt;&lt;!--将需要显示的内容放在这一行下面，若无内容，将不显示--&gt;
+
+&lt;/div&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
-
-
+var herf=document.getElementById(&quot;redirect&quot;);
+if (herf.innerText.indexOf(&apos;:&apos;)&gt; 0) window.location=herf.innerText;
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-</textarea>
-		
+	</textarea>
+
 	<div id="toolbar">
 		<input type="button" id="enc" value="Base64 Encode" />
 		<input type="button" id="encd" value="Base64 Encode and Create Data URI (HTML)" />
