@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+	<title>梯形计算工具</title>
+<script>
+const $=id=>document.getElementById(id);
+class Point extends Array {
+	constructor(name,x,y,z){
+		super(x,y,z);
+		this.name = name;
+	}
+	get x() {
+		return this[0];
+	}
+	set x(x) {
+		return this[0] = x;
+	}
+	get y() {
+		return this[1];
+	}
+	set y(y) {
+		return this[1] = y;
+	}
+	get z() {
+		return this[2];
+	}
+	set z(z) {
+		return this[2] = z;
+	}
+	di(obj) {
+		if (!(obj instanceof Point) && obj.di) return obj.di(this);
+		return Math.sqrt(Math.pow(obj.x-this.x,2)+Math.pow(obj.y-this.y,2));
+	}
+	di3(pt2) {
+		return Math.sqrt(Math.pow(pt2.x-this.x,2)+Math.pow(pt2.y-this.y,2)+Math.pow(pt2.z-this.z,2));
+	}
+}
+class Line extends Array {
+    constructor({x1,y1,x2,y2,A,B,C,k,b}) {
+        if (x1 !== undefined && x2 !== undefined && y1 !== undefined && y2 !== undefined) {
+            A = y2 - y1;
+            B = x1 - x2;
+            C = x2 * y1 - x1 * y2;
+        }
+        if (k !== undefined && b !== undefined) {
+            A = k;
+            B = -1;
+            C = b;
+        }
+        if (A !== undefined && B !== undefined && C !== undefined) super(A, B, C);
+        else throw new TypeError('Line: Args not enough.');
+    }
+    get A() {
+        return this[0];
+    }
+    get B() {
+        return this[1];
+    }
+    get C() {
+        return this[2];
+    }
+    di(obj) {
+        if (obj instanceof Point) return Math.abs(this.A * obj.x + this.B * obj.y + this.C) / Math.sqrt(this.A * this.A + this.B * this.B);
+        if (obj instanceof Line && this.A === obj.A && this.B === obj.B) return Math.abs(this.C - obj.C) / Math.sqrt(this.A * this.A + this.B * this.B);
+        else if (obj instanceof Line) return 0;
+        else if (obj.di) return obj.di(this);
+    }
+    cross(line) {
+        if (!(line instanceof Line)) return;
+        const D = this.A * line.B - this.B * line.A;
+        if (D === 0) return NaN;
+        let x = (this.B * line.C - this.C * line.B)/D;
+        let y = - (this.A * line.C - this.C * line.A)/D;
+        return new Point ("CrossPoint",x,y);
+    }
+}
+</script>
+</head>
+<body>
+<ul>
+	<li>beginning y:&nbsp;<input id="by" type="number" /></li>
+	<li>line1:&nbsp;
+	<ul>
+		<li>pt1:&nbsp;<input id="pt1" type="text" /></li>
+		<li>pt2:&nbsp;<input id="pt2" type="text" /></li>
+	</ul>
+	</li>
+	<li>line2:&nbsp;
+	<ul>
+		<li>pt3:&nbsp;<input id="pt3" type="text" /></li>
+		<li>pt4:&nbsp;<input id="pt4" type="text" /></li>
+	</ul>
+	</li>
+	<li>upper border:&nbsp;</li>
+</ul>
+
+<p><textarea id="ub"></textarea></p>
+
+<ul>
+	<li>di:&nbsp;<input id="di" type="number" /></li>
+	<li>result:&nbsp;</li>
+</ul>
+<p><textarea id="result"></textarea></p>
+<p><input id="go" type="button" value="Go" /></p>
+<script>
+$('go').onclick=e=>{
+const [pt1,pt2,pt3,pt4,d,by] = ['pt1','pt2','pt3','pt4','di','by'].map(e=>$(e).value);
+const [[x1,y1],[x2,y2],[x3,y3],[x4,y4]] = [pt1,pt2,pt3,pt4].map(e=>e.split(',').map(e=>Number(e)));
+const l1 = new Line({x1, y1, x2, y2});
+const l2 = new Line({x1:x3, y1:y3, x2:x4, y2:y4});
+const arr = $('ub').value.split('\n').map(e=>Number(e.trim()));
+let result = [];
+for (const j of arr) {
+if (!j) {
+result.push('');
+continue;
+}
+let lu = new Line ({x1:0, y1:by-j, x2:10, y2:by-j});
+let ld = new Line ({x1:0, y1:by-j-d, x2:10, y2:by-j-d});
+let p1u = l1.cross(lu);
+let p1d = l1.cross(ld);
+let p2u = l2.cross(lu);
+let p2d = l2.cross(ld);
+let du = p1u.di(p2u);
+let dd = p1d.di(p2d);
+result.push((du+dd)*d/2);
+}
+$('result').value = result.join('\n')
+}
+</script>
+</body>
+</html>
